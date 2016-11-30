@@ -7,11 +7,11 @@ Follow the instructions below to copy data from an S3 bucket in the *"source"* a
 
 1. In the *destination* account, run the destination-account.cf Cloudformation template.
 
-2. Make note of the AccessKeyId and SecretAccessKey created by the template.  These values can be found in the "Outputs" tab of the template once it has successfully completed.
+2. Make note of the "AWSAccessKeyId" and "AWSSecretkey" created by the template.  These values can be found in the "Outputs" tab of the template once it has successfully completed.
 
 3. In the *source* account, run the source-account.cf Cloudformation template.
 
-4. Run the following command to configure your AWS CLI to use the AccessKeyId and SecretAccessKey you made note of in step 2:
+4. Run the following command to configure your AWS CLI to use the "AWSAccessKeyId" and "AWSSecretkey" you made note of in step 2:
 
 	```
 	aws configure
