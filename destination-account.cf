@@ -1,3 +1,105 @@
 {
-	
+	"AWSTemplateFormatVersion" : "2010-09-09",
+	"Parameters": {
+		"SourceBucketName": {
+			"Description": "Name of the source S3 bucket",
+			"Type": "String",
+			"MinLength": 1,
+			"AllowedPattern" : "[\\x20-\\x7E]*",
+			"ConstraintDescription" : "Can only contain ASCII characters"
+		},
+		"DestinationBucketName": {
+			"Description": "Name of the destination S3 bucket",
+			"Type": "String",
+			"MinLength": 1,
+			"AllowedPattern" : "[\\x20-\\x7E]*",
+			"ConstraintDescription" : "Can only contain ASCII characters"
+		}
+	},
+	"Resources": {
+		"S3CopyUser": {
+			"Type" : "AWS::IAM::User",
+			"Properties" : {
+				"UserName" : "s3_copy_user",
+				"Policies": [
+					{
+						"PolicyName": "s3_copy_policy",
+						"PolicyDocument": {
+							"Version": "2012-10-17",
+							"Statement": [
+								{
+									"Effect": "Allow",
+									"Action": [
+										"s3:ListAllMyBuckets"
+									],
+									"Resource": [
+										"arn:aws:s3:::*"
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": [
+										"s3:ListBucket",
+										"s3:GetBucketLocation"
+									],
+									"Resource": [
+										{ "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "SourceBucketName" }]] },
+										{ "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "DestinationBucketName" }]] }
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": [
+										"s3:GetObject"
+									],
+									"Resource": [
+										{ "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "SourceBucketName" }, "/*"]] }
+									]
+								},
+								{
+									"Effect": "Allow",
+									"Action": [
+										"s3:GetObject",
+										"s3:PutObject"
+									],
+									"Resource": [
+										{ "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "DestinationBucketName" }, "/*"]] }
+									]
+								}
+							]
+						}
+					}
+				]
+			}
+		},
+		"S3CopyUserAccessKey" : {
+			"Type" : "AWS::IAM::AccessKey",
+			"Properties" : {
+				"UserName" : { "Ref" : "S3CopyUser" }
+			}
+		}
+	},
+	"Outputs": {
+		"S3CopyUser" : {
+			"Description" : "User created to copy buckets between accounts",
+			"Value" : {
+				"Ref" : "S3CopyUser"
+			}
+		},
+		"AWSAccessKeyId" : {
+			"Description" : "AWS Access Key for s3_copy_user",
+			"Value" : {
+				"Ref" : "S3CopyUserAccessKey"
+			}
+		},
+		"AWSSecretKey" : {
+			"Description" : "AWS Secret Key for s3_copy_user",
+			"Value" : {
+				"Fn::GetAtt" : [
+					"S3CopyUserAccessKey",
+					"SecretAccessKey"
+				]
+			}
+		}
+	}
 }

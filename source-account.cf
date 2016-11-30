@@ -1,3 +1,45 @@
 {
-	
+	"AWSTemplateFormatVersion" : "2010-09-09",
+	"Parameters": {
+		"SourceBucketName": {
+			"Description": "Name of the source S3 bucket",
+			"Type": "String",
+			"MinLength": 1,
+			"AllowedPattern" : "[\\x20-\\x7E]*",
+			"ConstraintDescription" : "Can only contain ASCII characters"
+		},
+		"DestinationAccountNumber": {
+			"Description": "Account number of the destination AWS account",
+			"Type": "Number"
+		}
+	},
+	"Resources": {
+		"SourceBucketPolicy": {
+			"Type": "AWS::S3::BucketPolicy",
+			"Properties": {
+				"Bucket": { "Ref": "SourceBucketName" },
+				"PolicyDocument": {
+					"Version": "2012-10-17",
+			        "Statement": [
+			            {
+			                "Effect": "Allow",
+			                "Principal": {
+			                    "AWS": [
+			                    	{ "Fn::Join": ["", ["arn:aws:iam::", { "Ref": "DestinationAccountNumber" }, ":user/s3_copy_user"]] }
+			                    ]           
+			                },
+			                "Action": [
+			                    "s3:List*",
+			                    "s3:GetObject"
+			                ],
+			                "Resource": [
+			                    { "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "SourceBucketName" }]] },
+			                    { "Fn::Join": ["", ["arn:aws:s3:::", { "Ref": "SourceBucketName" }, "/*"]] }
+			                ]
+			            }
+			        ]
+			    }
+			}
+		}
+	}
 }
