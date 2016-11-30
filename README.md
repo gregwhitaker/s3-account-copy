@@ -5,8 +5,8 @@ Provides a quick and easy way to safely copy AWS S3 buckets from one account to 
 ##Prerequisites
 The following items are required before running the instructions below:
 
-* 2 Amazon Web Services accounts
-* 2 S3 buckets (one bucket in each account)
+* 2 - Amazon Web Services accounts
+* 2 - S3 buckets (one bucket in each account)
 * Cloudformation, S3, and IAM access in both accounts
 * AWS CLI
 
