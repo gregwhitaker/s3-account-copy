@@ -2,6 +2,13 @@ s3-account-copy
 ===
 Provides a quick and easy way to safely copy AWS S3 buckets from one account to another using Cloudformation and the AWS CLI.
 
+##Prerequisites
+The following items are required before running the instructions below:
+
+* 2 AWS accounts
+* 2 S3 buckets (one bucket in each account)
+* Cloudformation, S3, and IAM access in both accounts
+
 ##Instructions
 Follow the instructions below to copy data from an S3 bucket in the *"source"* account to an S3 bucket in the *"destination"* account.
 
