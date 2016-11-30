@@ -3,6 +3,7 @@ s3-account-copy
 Provides a quick and easy way to safely copy AWS S3 buckets from one account to another using Cloudformation and the AWS CLI.
 
 ##Instructions
+Follow the instructions below to copy date from an S3 bucket in the "source" account to an S3 bucket in the "destination" account.
 
 1. In the destination account, run the destination-account.cf Cloudformation template.
 
